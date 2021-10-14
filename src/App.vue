@@ -1,9 +1,19 @@
 <template>
   <div id="nav">
     <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <router-link to="/about">About</router-link> |
+    <button @click="$store.dispatch('notes/allNotes')">
+      Get</button
+    >|
+    <button @click="$store.dispatch('notes/addNote')">
+      Add</button
+    >|
+    <button @click="$store.dispatch('notes/updateNote')">
+      Update
+    </button>
   </div>
-  <router-view/>
+  <h3>{{ isLoading ? "true" : "false" }} {{ notes }}</h3>
+  <router-view />
 </template>
 
 <style lang="scss">
@@ -28,3 +38,16 @@
   }
 }
 </style>
+
+<script>
+export default {
+  computed: {
+    notes() {
+      return this.$store.getters["notes/getAllNotes"];
+    },
+    isLoading() {
+      return this.$store.getters["notes/getIsLoading"];
+    }
+  }
+};
+</script>
