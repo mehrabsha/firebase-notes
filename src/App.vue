@@ -10,6 +10,12 @@
 a {
   text-decoration: none;
 }
+textarea {
+  resize: none !important ;
+  outline: none !important;
+  border: none;
+  box-shadow: none;
+}
 </style>
 
 <script>

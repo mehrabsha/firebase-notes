@@ -17,11 +17,16 @@ export default {
     setIsLoading: (state, payload) => (state.isLoading = payload)
   },
   actions: {
-    addNote({ rootGetters }) {
+    addNote({ rootGetters }, data) {
       const noteId = `note_${Date.now()}`;
       const userEmail = rootGetters["user/getEmail"];
       set(ref(db, `notes/${noteId}`), {
         id: noteId,
+        title: "test",
+        content: data.content,
+        is_favourite: false,
+        is_deleted: false,
+        file: data.file,
         email: userEmail
       });
     },
