@@ -2,7 +2,7 @@ export default {
   namespaced: true,
 
   state: {
-    email: "mehrab572@gmail.com"
+    email: ""
   },
   getters: {
     getEmail: state => state.email
