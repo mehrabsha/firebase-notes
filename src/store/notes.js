@@ -1,8 +1,7 @@
 import firebase from "../firebase";
-import { getDatabase, ref, onValue, set, update } from "firebase/database";
+import { getDatabase, ref, set, onValue, update } from "firebase/database";
 
 const db = getDatabase(firebase);
-
 export default {
   namespaced: true,
   state: {
@@ -18,10 +17,12 @@ export default {
     setIsLoading: (state, payload) => (state.isLoading = payload)
   },
   actions: {
-    addNote() {
+    addNote({ rootGetters }) {
       const noteId = `note_${Date.now()}`;
-      set(ref(db, "notes/" + noteId), {
-        id: noteId
+      const userEmail = rootGetters["user/getEmail"];
+      set(ref(db, `notes/${noteId}`), {
+        id: noteId,
+        email: userEmail
       });
     },
     updateNote() {
@@ -31,10 +32,16 @@ export default {
         }
       });
     },
-    allNotes({ commit }) {
+    allNotes({ commit, rootGetters }) {
       commit("setIsLoading", true);
       onValue(ref(db, "notes"), snapshot => {
-        commit("setNotesList", snapshot.val());
+        const allNotes = Object.values(snapshot.val());
+        const userNotes = allNotes.filter(
+          note => note.email === rootGetters["user/getEmail"]
+        );
+
+        // add user notes to state and set isloadng to false
+        commit("setNotesList", userNotes);
         commit("setIsLoading", false);
       });
     }
