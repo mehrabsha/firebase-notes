@@ -1,4 +1,4 @@
-# note
+# v2
 
 ## Project setup
 ```
