@@ -4,6 +4,8 @@ import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
 import Panel from "../views/Panel.vue";
 import Notes from "../views/Notes.vue";
+import Note from "../views/Note.vue";
+import Fav from "../views/Fav.vue";
 
 Vue.use(VueRouter);
 
@@ -11,6 +13,7 @@ const routes = [
   {
     path: "/",
     name: "Home",
+    redirect: "Login",
     component: Home
   },
   {
@@ -28,6 +31,16 @@ const routes = [
         name: "Notes",
         path: "/panel/notes",
         component: Notes
+      },
+      {
+        name: "Fav",
+        path: "/panel/fav",
+        component: Fav
+      },
+      {
+        name: "Note",
+        path: "/panel/note/:id",
+        component: Note
       }
     ]
   }

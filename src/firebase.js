@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyALNGX9kJQWLd_gUV1pkAsgvHKt-GIzwtY",
+  apiKey: process.env.VUE_APP_API_KEY,
   authDomain: "avers-1e494.firebaseapp.com",
   databaseURL: "https://avers-1e494-default-rtdb.firebaseio.com",
   projectId: "avers-1e494",

@@ -9,8 +9,18 @@ export default {
     isLoading: false
   },
   getters: {
-    getAllNotes: state => state.notesList,
-    getIsLoading: state => state.isLoading
+    getAllNotes: state => state.notesList.filter(note => !note.is_deleted),
+    getFavNotes: state =>
+      state.notesList.filter(note => note.is_favourite && !note.is_deleted),
+
+    getIsLoading: state => state.isLoading,
+    getFavNotesCount: state =>
+      state.notesList.filter(note => note.is_favourite && !note.is_deleted)
+        .length,
+    getDelNotesCount: state =>
+      state.notesList.filter(note => note.is_deleted).length,
+    getAllNotesCount: state =>
+      state.notesList.filter(note => !note.is_deleted).length
   },
   mutations: {
     setNotesList: (state, payload) => (state.notesList = payload),
@@ -30,10 +40,16 @@ export default {
         email: userEmail
       });
     },
-    updateNote() {
+    getNoteById({ state }, id) {
+      const res = state.notesList.filter(note => note.id === id)[0];
+      console.log(res);
+      return res;
+    },
+    updateNote(_, data) {
+      console.log();
       update(ref(db), {
-        "notes/note_1634207990954": {
-          id: "hi"
+        [`notes/${data.id}`]: {
+          ...data.note
         }
       });
     },

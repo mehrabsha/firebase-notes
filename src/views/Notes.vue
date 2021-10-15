@@ -22,6 +22,41 @@
         </v-btn>
       </div>
     </v-card>
+    <v-divider class="my-8" />
+    <v-row style="opacity:.7">
+      <v-col cols="6" md="2">
+        <v-card class="text-center py-5">
+          <v-icon style="font-size:3rem">mdi-text</v-icon>
+          <h3 class="my-1">
+            {{ this.$store.getters["notes/getAllNotesCount"] }}
+          </h3>
+          <h5>Notes</h5>
+        </v-card>
+      </v-col>
+      <v-col cols="6" md="2">
+        <v-card class="text-center py-5">
+          <v-icon style="font-size:3rem">mdi-heart</v-icon>
+          <h3 class="my-1">
+            {{ this.$store.getters["notes/getFavNotesCount"] }}
+          </h3>
+          <h5>Favorite Notes</h5>
+        </v-card>
+      </v-col>
+      <v-col cols="12" md="2">
+        <v-card class="text-center py-5">
+          <v-icon style="font-size:3rem">mdi-delete</v-icon>
+          <h3 class="my-1">
+            {{ this.$store.getters["notes/getDelNotesCount"] }}
+          </h3>
+          <h5>Deleted Notes</h5>
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col v-for="note in userNotes" :key="note.id" cols="12" md="3">
+        <noteCard :data="note" />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -32,7 +67,7 @@ import {
   uploadBytesResumable,
   getDownloadURL
 } from "firebase/storage";
-
+import noteCard from "../components/noteCard.vue";
 export default {
   data: () => {
     return {
@@ -41,6 +76,7 @@ export default {
       content: ""
     };
   },
+  components: { noteCard },
   methods: {
     openFiles() {
       this.$refs.input1.click();
@@ -94,6 +130,11 @@ export default {
           })
           .then(() => alert("sent"));
       }
+    }
+  },
+  computed: {
+    userNotes() {
+      return this.$store.getters["notes/getAllNotes"];
     }
   }
 };

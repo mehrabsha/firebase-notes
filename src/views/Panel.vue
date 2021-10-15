@@ -1,6 +1,17 @@
 <template>
-  <div class="d-flex">
-    <v-navigation-drawer height="100vh" permanent>
+  <div
+    class="d-flex"
+    style="height:100%"
+    v-if="!$store.getters['notes/getIsLoading']"
+  >
+    <v-navigation-drawer
+      v-model="drawer"
+      left
+      height="100%"
+      :permanent="!$vuetify.breakpoint.mobile"
+      :temporary="$vuetify.breakpoint.mobile"
+      :absolute="$vuetify.breakpoint.mobile"
+    >
       <template v-slot:prepend>
         <v-list class="mt-5">
           <v-list-item>
@@ -27,7 +38,7 @@
       <v-divider></v-divider>
 
       <v-list nav dense>
-        <v-list-item-group color="primary">
+        <v-list-item-group v-model="group" color="primary">
           <router-link :to="{ name: 'Notes' }">
             <v-list-item>
               <v-list-item-icon>
@@ -39,15 +50,17 @@
               </v-list-item-content>
             </v-list-item>
           </router-link>
-          <v-list-item>
-            <v-list-item-icon>
-              <v-icon>mdi-heart</v-icon>
-            </v-list-item-icon>
+          <router-link :to="{ name: 'Fav' }">
+            <v-list-item>
+              <v-list-item-icon>
+                <v-icon>mdi-heart</v-icon>
+              </v-list-item-icon>
 
-            <v-list-item-content>
-              <v-list-item-title>Favorite Notes</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>Favorite Notes</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </router-link>
         </v-list-item-group>
       </v-list>
 
@@ -56,7 +69,7 @@
         <v-subheader>Subtitle</v-subheader>
 
         <v-list-item-group color="primary">
-          <v-list-item>
+          <v-list-item @click="logout">
             <v-list-item-icon>
               <v-icon>mdi-logout</v-icon>
             </v-list-item-icon>
@@ -71,18 +84,34 @@
 
     <v-container><router-view /></v-container>
   </div>
+  <div v-else>
+    <h5 class="text-center">
+      loading...
+    </h5>
+  </div>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      items: [
-        { title: "Home", icon: "mdi-home-city" },
-        { title: "My Account", icon: "mdi-account" },
-        { title: "Users", icon: "mdi-account-group-outline" }
-      ]
+      drawer: true,
+      group: null
     };
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch("user/setEmail", "");
+      this.$router.push("/Login");
+    }
+  },
+  mounted() {
+    this.$store.dispatch("notes/allNotes");
+  },
+  watch: {
+    group() {
+      this.drawer = false;
+    }
   }
 };
 </script>
